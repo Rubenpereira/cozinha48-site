@@ -1,19 +1,14 @@
-// src/firebase.js
-// Configuração do Firebase para o projeto cozinha48-d4408
-// IMPORTANTE: substitua os valores abaixo pelas suas credenciais reais
-// Acesse: Firebase Console > Configurações do projeto > Seus aplicativos > SDK
-
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: "COLE_SUA_API_KEY_AQUI",
+  apiKey: "AIzaSyBDb5xaMA_oQMOMHKYqJc7XWe3zDHs8piY",
   authDomain: "cozinha48-d4408.firebaseapp.com",
   projectId: "cozinha48-d4408",
-  storageBucket: "cozinha48-d4408.appspot.com",
-  messagingSenderId: "COLE_SEU_MESSAGING_SENDER_ID",
-  appId: "COLE_SEU_APP_ID"
+  storageBucket: "cozinha48-d4408.firebasestorage.app",
+  messagingSenderId: "600979233685",
+  appId: "1:600979233685:web:db7fe3229fbf35e914349c"
 };
 
 const app = initializeApp(firebaseConfig);
