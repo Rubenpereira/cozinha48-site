@@ -13,32 +13,35 @@ export default function Painel() {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
-      if (!user) { navigate('/login'); return; }
-
-      console.log('🔍 UID do usuário logado:', user.uid);
-
-      // Busca em "usuarios" (apps Android) primeiro
-      let snap = await getDoc(doc(db, 'usuarios', user.uid));
-
-      console.log('📄 Documento encontrado em usuarios:', snap.exists());
-      
-      // Se não achou, tenta em "lojistas" (cadastro antigo do site)
-      if (!snap.exists()) {
-        snap = await getDoc(doc(db, 'lojistas', user.uid));
-        console.log('📄 Documento encontrado em lojistas:', snap.exists());
+      if (!user) { 
+        navigate('/login'); 
+        return; 
       }
 
-      if (snap.exists()) {
-        const dados = snap.data();
-        console.log('📋 Dados do documento:', dados);
-        console.log('🔐 Role:', dados.role);
-        console.log('👤 Tipo:', dados.tipo);
-        setUsuario({ uid: user.uid, ...dados });
-      } else {
-        console.log('❌ Usuário autenticado mas sem documento!');
-        // Usuário autenticado mas sem documento — redireciona
+      try {
+        // Busca em "usuarios"
+        const snap = await getDoc(doc(db, 'usuarios', user.uid));
+        
+        if (snap.exists()) {
+          const dados = { uid: user.uid, ...snap.data() };
+          console.log('=== DEBUG PAINEL ===');
+          console.log('UID:', user.uid);
+          console.log('Email:', user.email);
+          console.log('Documento:', dados);
+          console.log('role:', dados.role);
+          console.log('tipo:', dados.tipo);
+          console.log('plano:', dados.plano);
+          console.log('===================');
+          setUsuario(dados);
+        } else {
+          console.log('ERRO: Documento não encontrado para UID:', user.uid);
+          navigate('/login');
+        }
+      } catch (error) {
+        console.error('ERRO ao buscar usuário:', error);
         navigate('/login');
       }
+      
       setLoading(false);
     });
     return () => unsub();
@@ -61,9 +64,14 @@ export default function Painel() {
     );
   }
 
-  // Detecta o tipo do usuário e renderiza o painel correto
-  const role = usuario?.role || usuario?.tipo;
+  // DECISÃO: Admin ou Lojista?
+  const isAdmin = usuario?.role === 'admin' || usuario?.tipo === 'admin';
+  
+  console.log('RENDERIZANDO:', isAdmin ? 'PAINEL ADMIN' : 'PAINEL LOJISTA');
 
-  if (role === 'admin') return <PainelAdmin usuario={usuario} />;
+  if (isAdmin) {
+    return <PainelAdmin usuario={usuario} />;
+  }
+  
   return <PainelLojista usuario={usuario} />;
 }
