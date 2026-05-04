@@ -16,11 +16,13 @@ export default function PainelAdmin({ usuario }) {
   useEffect(() => {
     const q = query(
       collection(db, 'usuarios'),
-      where('tipo', '==', 'lojista'),
-      orderBy('dataCadastro', 'desc')
+      where('tipo', '==', 'lojista')
     );
     const unsub = onSnapshot(q, (snap) => {
-      setLojistas(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      const dados = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      // Ordena em memória (sem exigir índice)
+      dados.sort((a, b) => (b.dataCadastro?.toDate?.() || 0) - (a.dataCadastro?.toDate?.() || 0));
+      setLojistas(dados);
     });
     return () => unsub();
   }, []);
@@ -29,23 +31,25 @@ export default function PainelAdmin({ usuario }) {
   useEffect(() => {
     const q = query(
       collection(db, 'usuarios'),
-      where('tipo', '==', 'cliente'),
-      orderBy('dataCadastro', 'desc')
+      where('tipo', '==', 'cliente')
     );
     const unsub = onSnapshot(q, (snap) => {
-      setClientes(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      const dados = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      // Ordena em memória (sem exigir índice)
+      dados.sort((a, b) => (b.dataCadastro?.toDate?.() || 0) - (a.dataCadastro?.toDate?.() || 0));
+      setClientes(dados);
     });
     return () => unsub();
   }, []);
 
   // Buscar todos os pedidos em tempo real
   useEffect(() => {
-    const q = query(
-      collection(db, 'pedidos'),
-      orderBy('criadoEm', 'desc')
-    );
+    const q = query(collection(db, 'pedidos'));
     const unsub = onSnapshot(q, (snap) => {
-      setPedidos(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      const dados = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      // Ordena em memória (sem exigir índice)
+      dados.sort((a, b) => (b.criadoEm?.toDate?.() || 0) - (a.criadoEm?.toDate?.() || 0));
+      setPedidos(dados);
     });
     return () => unsub();
   }, []);

@@ -1,162 +1,69 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signOut } from 'firebase/auth';
-import { doc, getDoc, collection, query, where, onSnapshot, orderBy } from 'firebase/firestore';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase';
-import './Painel.css';
+import PainelAdmin from './PainelAdmin';
+import PainelLojista from './PainelLojista';
 
 export default function Painel() {
-  const [lojista, setLojista] = useState(null);
-  const [pedidos, setPedidos] = useState([]);
+  const [usuario, setUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = auth.currentUser;
-    if (!user) { navigate('/login'); return; }
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (!user) { navigate('/login'); return; }
 
-    // Carrega dados do lojista
-    getDoc(doc(db, 'lojistas', user.uid)).then((snap) => {
-      if (snap.exists()) setLojista(snap.data());
+      console.log('🔍 UID do usuário logado:', user.uid);
+
+      // Busca em "usuarios" (apps Android) primeiro
+      let snap = await getDoc(doc(db, 'usuarios', user.uid));
+
+      console.log('📄 Documento encontrado em usuarios:', snap.exists());
+      
+      // Se não achou, tenta em "lojistas" (cadastro antigo do site)
+      if (!snap.exists()) {
+        snap = await getDoc(doc(db, 'lojistas', user.uid));
+        console.log('📄 Documento encontrado em lojistas:', snap.exists());
+      }
+
+      if (snap.exists()) {
+        const dados = snap.data();
+        console.log('📋 Dados do documento:', dados);
+        console.log('🔐 Role:', dados.role);
+        console.log('👤 Tipo:', dados.tipo);
+        setUsuario({ uid: user.uid, ...dados });
+      } else {
+        console.log('❌ Usuário autenticado mas sem documento!');
+        // Usuário autenticado mas sem documento — redireciona
+        navigate('/login');
+      }
       setLoading(false);
-    });
-
-    // Escuta pedidos em tempo real
-    const q = query(
-      collection(db, 'pedidos'),
-      where('lojistaId', '==', user.uid),
-      orderBy('criadoEm', 'desc')
-    );
-    const unsub = onSnapshot(q, (snap) => {
-      setPedidos(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
     });
     return () => unsub();
   }, [navigate]);
 
-  const handleLogout = async () => {
-    await signOut(auth);
-    navigate('/');
-  };
-
-  const pedidosHoje = pedidos.filter((p) => {
-    const hoje = new Date();
-    const data = p.criadoEm?.toDate?.();
-    return data && data.toDateString() === hoje.toDateString();
-  });
-
-  const totalHoje = pedidosHoje.reduce((acc, p) => acc + (p.total || 0), 0);
-
   if (loading) {
     return (
-      <div className="painel-loading">
-        <div className="spinner"></div>
-        <p>Carregando painel...</p>
+      <div style={{
+        minHeight: '100vh', display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center', background: '#111', gap: 16
+      }}>
+        <div style={{
+          width: 36, height: 36, border: '3px solid #333',
+          borderTopColor: '#f97316', borderRadius: '50%',
+          animation: 'spin 0.8s linear infinite'
+        }}></div>
+        <p style={{ color: '#999', fontFamily: 'DM Sans, sans-serif' }}>Carregando...</p>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
   }
 
-  return (
-    <div className="painel">
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <div className="sidebar-logo">Cozinha<span>48</span></div>
-        <nav className="sidebar-nav">
-          <button className="nav-item active">📊 Dashboard</button>
-          <button className="nav-item" onClick={() => navigate('/painel/pedidos')}>📋 Pedidos</button>
-          <button className="nav-item" onClick={() => navigate('/painel/cardapio')}>🍽️ Cardápio</button>
-          <button className="nav-item" onClick={() => navigate('/painel/financeiro')}>💰 Financeiro</button>
-          <button className="nav-item" onClick={() => navigate('/painel/loja')}>⚙️ Minha loja</button>
-        </nav>
-        <button className="sidebar-logout" onClick={handleLogout}>← Sair</button>
-      </aside>
+  // Detecta o tipo do usuário e renderiza o painel correto
+  const role = usuario?.role || usuario?.tipo;
 
-      {/* Conteúdo */}
-      <main className="painel-main">
-        <header className="painel-header">
-          <div>
-            <h1>Olá, {lojista?.nomeResponsavel?.split(' ')[0]} 👋</h1>
-            <p>{lojista?.nomeLoja} · Plano {lojista?.plano === 'delivery' ? 'Delivery' : 'Básico'}</p>
-          </div>
-          {lojista?.periodoGratis && (
-            <div className="badge-gratis">✨ Período gratuito ativo</div>
-          )}
-        </header>
-
-        {/* Cards de resumo */}
-        <div className="stats-grid">
-          <div className="stat-card">
-            <span className="stat-icon">📦</span>
-            <div>
-              <div className="stat-value">{pedidosHoje.length}</div>
-              <div className="stat-label">Pedidos hoje</div>
-            </div>
-          </div>
-          <div className="stat-card">
-            <span className="stat-icon">💵</span>
-            <div>
-              <div className="stat-value">R$ {totalHoje.toFixed(2).replace('.', ',')}</div>
-              <div className="stat-label">Faturamento hoje</div>
-            </div>
-          </div>
-          <div className="stat-card">
-            <span className="stat-icon">📋</span>
-            <div>
-              <div className="stat-value">{pedidos.filter(p => p.status === 'pendente').length}</div>
-              <div className="stat-label">Aguardando confirmação</div>
-            </div>
-          </div>
-          <div className="stat-card">
-            <span className="stat-icon">🛵</span>
-            <div>
-              <div className="stat-value">{pedidos.filter(p => p.status === 'em_entrega').length}</div>
-              <div className="stat-label">Em entrega</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Pedidos recentes */}
-        <section className="pedidos-section">
-          <div className="section-header">
-            <h2>Pedidos recentes</h2>
-            <button className="btn-ver-todos" onClick={() => navigate('/painel/pedidos')}>
-              Ver todos →
-            </button>
-          </div>
-
-          {pedidos.length === 0 ? (
-            <div className="empty-state">
-              <p>🛒 Nenhum pedido ainda</p>
-              <span>Quando chegarem pedidos, eles aparecerão aqui em tempo real.</span>
-            </div>
-          ) : (
-            <div className="pedidos-list">
-              {pedidos.slice(0, 8).map((pedido) => (
-                <div className="pedido-row" key={pedido.id}>
-                  <div className="pedido-num">#{pedido.id.slice(-6).toUpperCase()}</div>
-                  <div className="pedido-cliente">{pedido.nomeCliente || '—'}</div>
-                  <div className="pedido-itens">{pedido.itens?.length || 0} itens</div>
-                  <div className="pedido-valor">R$ {(pedido.total || 0).toFixed(2).replace('.', ',')}</div>
-                  <div className={`pedido-status status-${pedido.status}`}>
-                    {statusLabel(pedido.status)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
-      </main>
-    </div>
-  );
-}
-
-function statusLabel(status) {
-  const labels = {
-    pendente: '⏳ Pendente',
-    confirmado: '✅ Confirmado',
-    em_preparo: '👨‍🍳 Em preparo',
-    em_entrega: '🛵 Em entrega',
-    entregue: '✓ Entregue',
-    cancelado: '✕ Cancelado',
-  };
-  return labels[status] || status;
+  if (role === 'admin') return <PainelAdmin usuario={usuario} />;
+  return <PainelLojista usuario={usuario} />;
 }
