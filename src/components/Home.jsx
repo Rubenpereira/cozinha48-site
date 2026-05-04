@@ -120,14 +120,15 @@ export default function Home() {
           <div className="plans-grid">
             <div className="plan-card">
               <div className="plan-name">Básico</div>
-              <div className="plan-price"><span className="currency">R$</span>110<span className="period">/mês</span></div>
-              <div className="plan-commission">+ 12% de comissão por pedido</div>
+              <div className="plan-price"><span className="currency">R$</span>70<span className="period">/mês</span></div>
+              <div className="plan-commission">+ 9% de comissão por pedido</div>
               <ul className="plan-features">
                 <li>Cadastro de cardápio completo</li>
                 <li>Recebimento de pedidos</li>
                 <li>Impressão de comanda</li>
                 <li>Relatórios básicos</li>
                 <li>2 meses grátis no início</li>
+                <li>Mensalidade apenas se faturar acima de R$ 1.800</li>
               </ul>
               <button className="plan-btn" onClick={() => navigate('/cadastro')}>Começar grátis</button>
             </div>
@@ -135,8 +136,8 @@ export default function Home() {
             <div className="plan-card featured">
               <div className="plan-badge">Mais completo</div>
               <div className="plan-name">Delivery</div>
-              <div className="plan-price"><span className="currency">R$</span>150<span className="period">/mês</span></div>
-              <div className="plan-commission">+ 23% de comissão por pedido</div>
+              <div className="plan-price"><span className="currency">R$</span>110<span className="period">/mês</span></div>
+              <div className="plan-commission">+ 15% de comissão por pedido</div>
               <ul className="plan-features">
                 <li>Tudo do plano Básico</li>
                 <li>Integração com motoboys</li>
@@ -144,6 +145,7 @@ export default function Home() {
                 <li>Relatórios avançados</li>
                 <li>Dashboard financeiro</li>
                 <li>2 meses grátis no início</li>
+                <li>Mensalidade apenas se faturar acima de R$ 1.800</li>
               </ul>
               <button className="plan-btn featured-btn" onClick={() => navigate('/cadastro')}>Começar grátis</button>
             </div>
