@@ -14,11 +14,13 @@ export default function PainelLojista({ usuario }) {
 
     const q = query(
       collection(db, 'pedidos'),
-      where('lojistaId', '==', usuario.uid),
-      orderBy('criadoEm', 'desc')
+      where('lojistaId', '==', usuario.uid)
     );
     const unsub = onSnapshot(q, (snap) => {
-      setPedidos(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      const dados = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+      // Ordena em memória (sem exigir índice)
+      dados.sort((a, b) => (b.criadoEm?.toDate?.() || 0) - (a.criadoEm?.toDate?.() || 0));
+      setPedidos(dados);
       setLoading(false);
     });
     return () => unsub();
