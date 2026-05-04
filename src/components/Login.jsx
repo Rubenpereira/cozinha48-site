@@ -58,6 +58,11 @@ export default function Login() {
       <div className="auth-card">
         <Link to="/" className="auth-logo">Cozinha<span>48</span></Link>
         
+        {/* Link discreto para admin */}
+        <Link to="/admin" className="link-admin-discreto" title="Acesso administrativo">
+          🔐
+        </Link>
+        
         {!mostrarReset ? (
           <>
             <h2>Acessar painel</h2>

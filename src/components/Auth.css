@@ -33,6 +33,26 @@
   color: var(--white);
 }
 
+.link-admin-discreto {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 20px;
+  opacity: 0.4;
+  transition: opacity 0.2s, transform 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.link-admin-discreto:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.auth-card {
+  position: relative;
+}
+
 .auth-card h2 {
   font-family: var(--font-head);
   font-size: 28px;
