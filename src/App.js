@@ -9,6 +9,8 @@ import Login from './components/Login';
 import Cadastro from './components/Cadastro';
 import Painel from './components/Painel';
 import Rastreamento from './components/Rastreamento';
+import LoginAdmin from './components/LoginAdmin';
+import AdminDashboard from './components/AdminDashboard';
 
 // Rota protegida — só acessa se estiver logado
 function PrivateRoute({ children }) {
@@ -49,7 +51,11 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
 
-        {/* Painel protegido */}
+        {/* Admin routes */}
+        <Route path="/admin" element={<LoginAdmin />} />
+        <Route path="/admin/dashboard" element={<PrivateRoute><AdminDashboard /></PrivateRoute>} />
+
+        {/* Painel protegido (lojista) */}
         <Route path="/painel" element={<PrivateRoute><Painel /></PrivateRoute>} />
         <Route path="/painel/*" element={<PrivateRoute><Painel /></PrivateRoute>} />
         <Route path="/rastreamento/:pedidoId" element={<PrivateRoute><Rastreamento /></PrivateRoute>} />

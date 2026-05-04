@@ -198,6 +198,27 @@
   font-weight: 500;
 }
 
+.admin-badge-header {
+  background: rgba(249, 115, 22, 0.15);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  color: var(--accent);
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 16px;
+  letter-spacing: 2px;
+}
+
+.admin-btn {
+  background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+}
+
+.admin-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+}
+
 .btn-esqueceu-senha,
 .btn-voltar-login {
   background: none;
