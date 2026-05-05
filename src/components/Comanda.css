@@ -1,0 +1,139 @@
+/* ====== Comanda imprimível ======
+   Otimizada para impressoras térmicas 80mm (largura útil ~72mm).
+   Para 58mm, ajustar @page size para 58mm 200mm. */
+
+.comanda-print {
+  display: none; /* Escondida na tela */
+}
+
+@media print {
+  /* Esconde todo o resto da página */
+  body * {
+    visibility: hidden;
+  }
+  .comanda-print, .comanda-print * {
+    visibility: visible;
+  }
+  .comanda-print {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 72mm;
+    color: #000;
+    background: #fff;
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 10pt;
+    line-height: 1.35;
+    padding: 4mm;
+  }
+
+  @page {
+    size: 80mm 297mm; /* Térmica 80mm (mude para 58mm 297mm se for 58mm) */
+    margin: 0;
+  }
+
+  .comanda-cabecalho {
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .comanda-cabecalho h1 {
+    font-size: 13pt;
+    font-weight: 700;
+    margin: 0 0 4px;
+    text-transform: uppercase;
+  }
+  .comanda-cabecalho p {
+    margin: 1px 0;
+    font-size: 9pt;
+  }
+
+  .comanda-divisor {
+    text-align: center;
+    margin: 4px 0;
+    font-size: 9pt;
+    letter-spacing: -1px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .comanda-pedido {
+    text-align: center;
+    margin: 4px 0;
+  }
+  .comanda-numero {
+    font-size: 14pt;
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+  .comanda-pedido p {
+    margin: 1px 0;
+    font-size: 9pt;
+  }
+
+  .comanda-cliente p,
+  .comanda-endereco p,
+  .comanda-pagamento p,
+  .comanda-observacao p,
+  .comanda-itens p {
+    margin: 1px 0;
+  }
+
+  .comanda-item {
+    margin: 4px 0;
+  }
+  .comanda-item-linha {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .comanda-item-linha span:first-child {
+    flex: 1;
+    word-break: break-word;
+  }
+  .comanda-obs {
+    font-size: 9pt;
+    margin: 1px 0 1px 8px !important;
+    font-style: italic;
+  }
+
+  .comanda-totais .comanda-item-linha {
+    margin: 2px 0;
+  }
+  .comanda-total {
+    font-size: 12pt;
+    margin-top: 4px !important;
+    padding-top: 4px;
+    border-top: 1px dashed #000;
+  }
+
+  .comanda-rodape {
+    text-align: center;
+    margin-top: 6px;
+    font-size: 9pt;
+  }
+  .comanda-pequeno {
+    font-size: 8pt;
+    color: #555;
+  }
+
+  /* Esconde explicitamente componentes da SPA */
+  .sidebar,
+  .painel-header,
+  .acoes-pedido,
+  .timeline-status,
+  .detalhe-grid,
+  .btn-voltar,
+  .filtros-pedidos,
+  .pedidos-tabela,
+  .pedidos-list,
+  .stats-grid,
+  .pedidos-section,
+  .empty-state,
+  .cardapio-erro,
+  .categorias-bar,
+  .itens-grid,
+  .modal-overlay {
+    display: none !important;
+  }
+}

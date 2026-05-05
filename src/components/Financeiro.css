@@ -1,0 +1,205 @@
+/* ====== Financeiro ====== */
+.filtros-periodo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin: 16px 0 24px;
+}
+.datas-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+  color: #aaa;
+  font-size: 0.85rem;
+}
+.datas-custom input[type=date] {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  color: #fff;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+}
+.datas-custom input[type=date]:focus {
+  outline: none;
+  border-color: #f97316;
+}
+
+/* KPI cards */
+.kpis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.kpi-card {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.kpi-icone {
+  font-size: 1.8rem;
+  width: 50px;
+  height: 50px;
+  background: #232323;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.kpi-label {
+  color: #999;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.kpi-valor {
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.kpi-detalhe {
+  color: #777;
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+/* Gráfico */
+.grafico-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+.grafico-svg {
+  width: 100%;
+  min-width: 480px;
+  height: auto;
+  display: block;
+}
+.grafico-legenda {
+  text-align: center;
+  color: #999;
+  font-size: 0.8rem;
+  margin-top: 8px;
+}
+.grafico-legenda strong { color: #f97316; }
+
+/* Duas colunas */
+.duas-colunas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+@media (max-width: 900px) {
+  .duas-colunas { grid-template-columns: 1fr; }
+}
+
+/* Top itens */
+.top-itens-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.top-itens-lista li {
+  display: grid;
+  grid-template-columns: 36px 1fr 60px 100px;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid #2a2a2a;
+  font-size: 0.9rem;
+}
+.top-itens-lista li:last-child { border-bottom: none; }
+.top-itens-lista .rank {
+  color: #f97316;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.top-itens-lista .nome-item { color: #fff; }
+.top-itens-lista .qtd-item {
+  color: #ccc;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.top-itens-lista .valor-item {
+  color: #aaa;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* Heatmap */
+.heatmap-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+.heatmap {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 4px;
+}
+.heatmap-celula {
+  aspect-ratio: 1;
+  background: #1a1a1a;
+  border-radius: 4px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.7rem;
+  text-align: center;
+}
+.heatmap-num {
+  font-weight: 700;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+.heatmap-hora {
+  font-size: 0.6rem;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+/* Tabela de pedidos no financeiro */
+.tabela-pedidos-fin .tabela-th,
+.tabela-pedidos-fin .tabela-tr {
+  display: grid;
+  grid-template-columns: 130px 100px 1.2fr 80px 110px;
+  gap: 12px;
+  padding: 10px 0;
+  align-items: center;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #232323;
+}
+.tabela-pedidos-fin .tabela-th {
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.72rem;
+  border-bottom: 1px solid #2a2a2a;
+  font-weight: 600;
+}
+.tabela-pedidos-fin .tabela-tr { color: #ccc; }
+.tabela-pedidos-fin .tabela-tr:last-child { border-bottom: none; }
+
+@media (max-width: 700px) {
+  .tabela-pedidos-fin .tabela-th { display: none; }
+  .tabela-pedidos-fin .tabela-tr {
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 12px;
+  }
+}

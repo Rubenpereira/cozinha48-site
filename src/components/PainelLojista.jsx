@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signOut } from 'firebase/auth';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
-import { auth, db } from '../firebase';
+import { db } from '../firebase';
+import SidebarLojista from './SidebarLojista';
 
 export default function PainelLojista({ usuario }) {
   const [pedidos, setPedidos] = useState([]);
@@ -26,11 +26,6 @@ export default function PainelLojista({ usuario }) {
     return () => unsub();
   }, [usuario?.uid]);
 
-  const handleLogout = async () => {
-    await signOut(auth);
-    navigate('/');
-  };
-
   const pedidosHoje = pedidos.filter((p) => {
     const hoje = new Date();
     const data = p.criadoEm?.toDate?.();
@@ -50,26 +45,7 @@ export default function PainelLojista({ usuario }) {
 
   return (
     <div className="painel">
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <div className="sidebar-logo">Cozinha<span>48</span></div>
-        <nav className="sidebar-nav">
-          <button className="nav-item active">📊 Dashboard</button>
-          <button className="nav-item" onClick={() => navigate('/painel/pedidos')}>
-            📋 Pedidos
-          </button>
-          <button className="nav-item" onClick={() => navigate('/painel/cardapio')}>
-            🍽️ Cardápio
-          </button>
-          <button className="nav-item" onClick={() => navigate('/painel/financeiro')}>
-            💰 Financeiro
-          </button>
-          <button className="nav-item" onClick={() => navigate('/painel/loja')}>
-            ⚙️ Minha loja
-          </button>
-        </nav>
-        <button className="sidebar-logout" onClick={handleLogout}>← Sair</button>
-      </aside>
+      <SidebarLojista ativa="dashboard" />
 
       {/* Main Content */}
       <main className="painel-main">

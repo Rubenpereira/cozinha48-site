@@ -46,15 +46,42 @@ npm run build
 ```
 src/
 ├── components/
-│   ├── Navbar.jsx        # Navegação principal
-│   ├── Home.jsx          # Página inicial (institucional)
-│   ├── Login.jsx         # Login do lojista
-│   ├── Cadastro.jsx      # Cadastro de novos lojistas
-│   └── Painel.jsx        # Dashboard do lojista (protegido)
-├── firebase.js           # Configuração do Firebase
-├── App.js                # Rotas da aplicação
-└── index.js              # Entrada do React
+│   ├── Navbar.jsx                   # Navegação pública
+│   ├── Home.jsx                     # Página inicial
+│   ├── Login.jsx                    # Login do lojista
+│   ├── Cadastro.jsx                 # Cadastro de novos lojistas
+│   ├── Painel.jsx                   # Roteador admin/lojista
+│   ├── PainelLojista.jsx            # Dashboard do lojista
+│   ├── PainelAdmin.jsx              # Dashboard do admin
+│   ├── LoginAdmin.jsx               # Login do admin
+│   ├── AdminDashboard.jsx           # Painel administrativo
+│   ├── SidebarLojista.jsx           # Sidebar reutilizável (Fase 2)
+│   ├── Cardapio.jsx                 # CRUD de cardápio (Fase 2)
+│   ├── Pedidos.jsx                  # Lista completa de pedidos (Fase 2)
+│   ├── PedidoDetalhe.jsx            # Detalhe + ações (Fase 2)
+│   ├── Comanda.jsx                  # Comanda térmica imprimível (Fase 2)
+│   ├── Financeiro.jsx               # Dashboard financeiro (Fase 3)
+│   ├── RelatorioFinanceiroPrint.jsx # Relatório PDF A4 (Fase 3)
+│   ├── Rastreamento.jsx             # Rastreio de entrega
+│   ├── pedidoUtils.js               # Helpers de pedido
+│   └── financeiroUtils.js           # Helpers financeiros (KPIs, CSV, etc.)
+├── hooks/
+│   └── useUsuario.js                # Hook de auth + dados do lojista
+├── firebase.js                      # Auth + Firestore + Storage
+├── App.js                           # Rotas
+└── index.js                         # Entrada do React
 ```
+
+## Modelagem Firestore (Fase 2/3)
+
+| Coleção       | Campos                                                                                              |
+|---------------|-----------------------------------------------------------------------------------------------------|
+| `usuarios`    | `nome, email, role/tipo, nomeEstabelecimento, plano, comissaoPlataforma (%), cnpj, endereco, ...`  |
+| `categorias`  | `lojistaId, nome, ordem, criadoEm`                                                                  |
+| `cardapio`    | `lojistaId, categoriaId, nome, descricao, preco, disponivel, imagem, ordem, criadoEm, atualizadoEm` |
+| `pedidos`     | `lojistaId, nomeCliente, telefoneCliente, itens[], total, status, formaPagamento, endereco, ...`    |
+
+Imagens dos itens do cardápio são comprimidas no navegador (600px, JPEG q=0.75 ≈ 50–80KB) e armazenadas como **base64 dentro do próprio documento** — não é necessário ativar o Firebase Storage / plano Blaze.
 
 ## Funcionalidades
 
@@ -63,7 +90,15 @@ src/
 - [x] Login com e-mail/senha
 - [x] Painel protegido por autenticação
 - [x] Dashboard com pedidos em tempo real (Firestore)
-- [ ] Gerenciamento de cardápio (Fase 2)
-- [ ] Pedidos detalhados (Fase 2)
-- [ ] Impressão de comanda (Fase 2)
-- [ ] Dashboard financeiro (Fase 3)
+- [x] **Gerenciamento de cardápio (Fase 2)** — CRUD de categorias e itens, upload de fotos, toggle de disponibilidade
+- [x] **Pedidos detalhados (Fase 2)** — Lista filtrável + detalhe com timeline de status e ações (avançar/cancelar)
+- [x] **Impressão de comanda (Fase 2)** — Layout térmico 80mm (`@media print`) com cabeçalho, itens, endereço e total
+- [x] **Dashboard financeiro (Fase 3)** — KPIs (faturamento, ticket médio), gráfico SVG por dia, top 10 itens, heatmap por hora, comissão da plataforma e repasse líquido, exportação CSV/PDF
+
+## Próximos passos pra publicar
+
+1. **Configure regras do Firestore** para `categorias` e `cardapio` (mesma lógica de `pedidos`: lojistaId == request.auth.uid).
+2. **(Opcional)** Defina `comissaoPlataforma` no documento do usuário (default = 10%).
+3. `npm run build` e deploy na Vercel.
+
+> Não é necessário ativar o Firebase Storage nem o plano Blaze — as fotos são comprimidas no navegador e salvas direto no Firestore.

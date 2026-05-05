@@ -1,0 +1,183 @@
+/* ====== Detalhe do pedido ====== */
+.btn-voltar {
+  background: transparent;
+  border: none;
+  color: #999;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-bottom: 16px;
+  padding: 6px 0;
+  transition: color 0.15s;
+}
+.btn-voltar:hover { color: #fff; }
+
+.pedido-status-grande {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: #232323;
+  color: #ccc;
+  align-self: center;
+}
+
+/* Timeline de status */
+.timeline-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 18px 24px;
+  margin: 16px 0 24px;
+  position: relative;
+  gap: 8px;
+}
+.timeline-status::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 40px;
+  right: 40px;
+  height: 2px;
+  background: #2a2a2a;
+  z-index: 0;
+}
+.timeline-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  text-align: center;
+}
+.timeline-bola {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #2a2a2a;
+  border: 2px solid #1a1a1a;
+  transition: background 0.2s;
+}
+.timeline-item.ativo .timeline-bola {
+  background: #f97316;
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.2);
+}
+.timeline-item span {
+  font-size: 0.72rem;
+  color: #777;
+  font-weight: 500;
+}
+.timeline-item.ativo span { color: #f97316; }
+
+@media (max-width: 700px) {
+  .timeline-status {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 12px 18px;
+  }
+  .timeline-status::before { display: none; }
+  .timeline-item { flex: 0 0 auto; flex-direction: row; }
+}
+
+/* Grid de cards */
+.detalhe-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+@media (max-width: 900px) {
+  .detalhe-grid { grid-template-columns: 1fr; }
+}
+.card-detalhe {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 20px 22px;
+  color: #ddd;
+}
+.card-detalhe h2 {
+  color: #fff;
+  font-size: 0.95rem;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.card-detalhe p {
+  margin: 4px 0;
+  line-height: 1.5;
+}
+.card-detalhe a { color: #f97316; text-decoration: none; }
+.sem-conteudo { color: #777; font-style: italic; }
+
+/* Itens */
+.lista-itens {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 14px;
+  border-top: 1px solid #2a2a2a;
+}
+.lista-itens li {
+  padding: 10px 0;
+  border-bottom: 1px solid #2a2a2a;
+}
+.item-linha {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+.item-linha .qtd {
+  color: #f97316;
+  font-weight: 600;
+}
+.item-linha .nome { color: #fff; }
+.item-linha .valor { color: #fff; font-variant-numeric: tabular-nums; }
+.obs {
+  color: #888;
+  font-size: 0.85rem;
+  margin: 4px 0 0 44px;
+  font-style: italic;
+}
+
+.totais {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+.totais > div {
+  display: flex;
+  justify-content: space-between;
+  color: #aaa;
+}
+.totais .total-final {
+  border-top: 1px solid #2a2a2a;
+  padding-top: 10px;
+  margin-top: 6px;
+  color: #fff;
+  font-size: 1.1rem;
+}
+.totais .total-final strong { color: #f97316; }
+
+/* Ações do pedido */
+.acoes-pedido {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 16px 0 32px;
+}
+.btn-secundario.btn-perigo {
+  border-color: #5a1a1a;
+  color: #ff8a8a;
+}
+.btn-secundario.btn-perigo:hover {
+  background: #2a1010;
+  border-color: #5a1a1a;
+}

@@ -1,0 +1,153 @@
+/* ====== Relatório financeiro imprimível ======
+   Layout A4 (210mm x 297mm). Visível apenas durante impressão. */
+
+.relatorio-print {
+  display: none;
+}
+
+@media print {
+  body.imprimindo-relatorio * {
+    visibility: hidden;
+  }
+  body.imprimindo-relatorio .relatorio-print,
+  body.imprimindo-relatorio .relatorio-print * {
+    visibility: visible;
+  }
+  body.imprimindo-relatorio .relatorio-print {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 12mm 14mm;
+    color: #000;
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    line-height: 1.4;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  body.imprimindo-relatorio .rel-cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid #000;
+    padding-bottom: 8mm;
+    margin-bottom: 8mm;
+  }
+  body.imprimindo-relatorio .rel-cabecalho h1 {
+    font-size: 20pt;
+    margin: 0 0 4px;
+  }
+  body.imprimindo-relatorio .rel-cabecalho p {
+    margin: 1px 0;
+    font-size: 10pt;
+  }
+  body.imprimindo-relatorio .rel-periodo {
+    text-align: right;
+    border: 1px solid #ccc;
+    padding: 6mm 8mm;
+    border-radius: 4px;
+  }
+  body.imprimindo-relatorio .rel-periodo span {
+    display: block;
+    font-size: 8pt;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+  body.imprimindo-relatorio .rel-periodo strong {
+    font-size: 11pt;
+  }
+
+  body.imprimindo-relatorio .rel-kpis {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4mm;
+    margin-bottom: 8mm;
+  }
+  body.imprimindo-relatorio .rel-kpi {
+    border: 1px solid #ddd;
+    padding: 4mm 5mm;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  body.imprimindo-relatorio .rel-kpi span {
+    color: #555;
+    font-size: 10pt;
+  }
+  body.imprimindo-relatorio .rel-kpi strong {
+    font-size: 13pt;
+  }
+  body.imprimindo-relatorio .rel-kpi.rel-destaque {
+    grid-column: 1 / -1;
+    border-color: #000;
+    border-width: 2px;
+    background: #f5f5f5;
+  }
+  body.imprimindo-relatorio .rel-kpi.rel-destaque strong {
+    font-size: 16pt;
+  }
+  body.imprimindo-relatorio .rel-vermelho { color: #b00020; }
+  body.imprimindo-relatorio .rel-verde { color: #007a3d; }
+
+  body.imprimindo-relatorio .rel-secao {
+    page-break-inside: avoid;
+    margin-bottom: 8mm;
+  }
+  body.imprimindo-relatorio .rel-secao h2 {
+    font-size: 13pt;
+    border-bottom: 1px solid #000;
+    padding-bottom: 2mm;
+    margin: 0 0 4mm;
+  }
+  body.imprimindo-relatorio .rel-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9pt;
+  }
+  body.imprimindo-relatorio .rel-tabela th,
+  body.imprimindo-relatorio .rel-tabela td {
+    border-bottom: 1px solid #ddd;
+    padding: 2mm 3mm;
+    text-align: left;
+  }
+  body.imprimindo-relatorio .rel-tabela th {
+    background: #f5f5f5;
+    font-weight: 700;
+    border-bottom: 1px solid #000;
+  }
+  body.imprimindo-relatorio .rel-tabela tr:nth-child(even) td {
+    background: #fafafa;
+  }
+
+  body.imprimindo-relatorio .rel-rodape {
+    text-align: center;
+    color: #888;
+    font-size: 8pt;
+    margin-top: 10mm;
+    padding-top: 4mm;
+    border-top: 1px solid #ddd;
+  }
+
+  /* Esconde o resto */
+  body.imprimindo-relatorio .sidebar,
+  body.imprimindo-relatorio .painel-header,
+  body.imprimindo-relatorio .filtros-periodo,
+  body.imprimindo-relatorio .kpis-grid,
+  body.imprimindo-relatorio .grafico-wrapper,
+  body.imprimindo-relatorio .duas-colunas,
+  body.imprimindo-relatorio .tabela-pedidos-fin,
+  body.imprimindo-relatorio .card-detalhe {
+    display: none !important;
+  }
+}
